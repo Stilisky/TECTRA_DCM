@@ -1,13 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import Routes from './Routes'
 
-const App = () => {
+const BottomTabs = () => {
   return (
     <View>
-      <Routes />    
+      <Text>BottomTabs</Text>
     </View>
   )
 }
 
-export default App
+export default BottomTabs
