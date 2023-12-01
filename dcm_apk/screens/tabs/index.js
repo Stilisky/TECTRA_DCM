@@ -4,7 +4,7 @@ import React from 'react'
 const BottomTabs = () => {
   return (
     <View>
-      <Text>BottomTabs</Text>
+      <Text>THIS IS BottomTabs</Text>
     </View>
   )
 }
