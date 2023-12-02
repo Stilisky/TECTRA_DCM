@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
       type: String,
       require: true
    },
-   adresse: {
+   adress: {
       type: String,
       require: true
    },
@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Agency'
    },
-   agency: {
+   target: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Target'
    },

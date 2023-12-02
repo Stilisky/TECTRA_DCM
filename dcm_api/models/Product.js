@@ -21,10 +21,6 @@ const productSchema = new mongoose.Schema({
    competitivePrice: {
       type: Number
    },
-   users: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-   },
    created_at: {
       type: Date,
       default: Date.now()
