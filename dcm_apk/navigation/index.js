@@ -2,35 +2,18 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createSwitchNavigator } from 'react-navigation';
+import HomeScreen from '../screens/HomeScreen';
+import LoginScreen from '../screens/LoginScreen';
 
-import Home from '../screens/Home';
-import Login from '../screens/Login';
-
-const AuthStack = createStackNavigator({
-  Login: Login,
-});
-
-const AppStack = createStackNavigator({
-  Home: Home,
-  // Ajoutez d'autres écrans ici
-});
-
-const SwitchNavigator = createSwitchNavigator(
-  {
-    AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack,
-  },
-  {
-    initialRouteName: 'AuthLoading',
-  }
-);
+const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <SwitchNavigator />
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
