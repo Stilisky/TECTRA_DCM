@@ -34,7 +34,7 @@ const LoginScreen = () => {
 
    const handleSignUp = () => {
       // Naviguer vers l'écran d'inscription
-      navigation.navigate('SignUp');
+      navigation.navigate('Signup');
    };
 
    return (
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
       borderRadius:900
    },
    title: {
-      fontSize: 50,
+      fontSize: 70,
       marginBottom: 16,
       textAlign: 'center',
       color:'#fff'
