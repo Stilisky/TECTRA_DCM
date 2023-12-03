@@ -1,22 +1,22 @@
 const mongoose =require('mongoose')
 
 const saleSchema = new mongoose.Schema({
-   soldQty: {
-      type: Number,
-      require: true
+   status: {
+      type: String,
+      enum: ['saved', 'unsaved'],
+      default: 'unsaved'
    },
    sellingPrice: {
-      type: Number,
-      require: true
+      type: Number
    },
    created_at: {
       type: Date,
       default: Date.now()
    },
-   product: {
+   histories: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product'
-   },
+      ref: 'History'
+   }],
    client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Client'

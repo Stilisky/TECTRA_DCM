@@ -14,10 +14,6 @@ const productSchema = new mongoose.Schema({
       type: Number,
       require: true
    },
-   availableQty: {
-      type: Number,
-      require: true
-   },
    competitivePrice: {
       type: Number
    },

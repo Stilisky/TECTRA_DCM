@@ -1,12 +1,12 @@
 const saleModel = require('../models/Sale')
 
 const getSales = async () => {
-   const prods = await saleModel.find().populate('client').populate('commercial')
+   const prods = await saleModel.find().populate('client').populate('commercial').populate('products')
    return prods
 }
 
 const getSale = async (sale_id) => {
-   const sale = await saleModel.findById(sale_id).populate('client').populate('commercial')
+   const sale = await saleModel.findById(sale_id).populate('client').populate('commercial').populate('products')
    return sale
 }
 
