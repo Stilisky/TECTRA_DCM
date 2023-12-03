@@ -26,6 +26,11 @@ const UserSchema = new mongoose.Schema({
       type: String,
       require: true
    },
+   etatCompte: {
+     type: String,
+     enum:['activé', 'desactivé'],
+     default: 'desactivé'      
+   },
    created_at: {
       type: Date,
       default: Date.now()
