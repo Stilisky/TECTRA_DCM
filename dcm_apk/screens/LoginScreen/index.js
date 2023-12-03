@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#3b42d1',
+      padding:40
    },
    image: {
       width: '90%',

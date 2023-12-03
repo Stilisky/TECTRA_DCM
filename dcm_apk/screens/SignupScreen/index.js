@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#3b42d1',
-        paddingHorizontal: 16
+        paddingHorizontal: 16,
+        padding:40
     },
     image: {
         width: '90%',
