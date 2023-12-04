@@ -9,7 +9,7 @@ const {
   deleteAgency
 } = require('../controllers/agencyController')
 
-router.route('/').get(authAdmin, getAgencies)
+router.route('/').get(getAgencies)
 router.route('/:agencyId').get(authAdmin, getAgency).put(authAdmin, updateAgency).delete(authAdmin, deleteAgency)
 router.route('/register').post(createAgency)
 
