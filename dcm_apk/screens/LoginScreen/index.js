@@ -10,27 +10,28 @@ const LoginScreen = () => {
 
    const handleLogin = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5010/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        });
-  
-        if (response.ok) {
-          navigation.navigate('Home');
-        } else {
-          const errorData = await response.json();
-          Alert.alert('Erreur', errorData.message || 'Une erreur s\'est produite lors de la connexion.');
-        }
+         const response = await fetch('http://127.0.0.1:5010/api/v1/login', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               email: email,
+               password: password,
+            }),
+         });
+   
+         if (response.ok) {
+            navigation.navigate('Home');
+         } else {
+            const errorData = await response.json();
+            console.error('Error:', errorData.message || 'An error occurred during login.');
+            Alert.alert('Error', errorData.message || 'An error occurred during login.');
+         }
       } catch (error) {
-        console.error('Erreur lors de la connexion :', error.message);
+         console.error('Error during login:', error.message);
       }
-    };
+   };
 
    const handleSignUp = () => {
       // Naviguer vers l'écran d'inscription
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
    inputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '80%',
+      width: '100%',
       marginBottom: 16,
       borderBottomWidth: 2,
       borderBottomColor: '#333',
