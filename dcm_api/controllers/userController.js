@@ -2,6 +2,7 @@ const userService = require('../Services/userServices')
 const agencyService = require('../Services/agenceService')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { model } = require('mongoose')
 require('dotenv').config()
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const usernameRegex = /^[a-zA-Z0-9\-']+$/;
@@ -50,6 +51,7 @@ const register = async (req, res) => {
                      password: newPassword,
                      phone: phone,
                      adress: adress,
+                     etatCompte: 'activé',
                      role: 'ADMIN'
                   }
                }
@@ -123,14 +125,26 @@ const updateUser = async (req, res) => {
       res.status(500).json({'message': 'Internal Server Error'})
    }
 }
-const promoteCommercial = async (req, res) => {
+const compteStatusUpdate = async (req, res) => {
    try {
-      const id = req.params.userId
-      if(req.body.password) {
-         req.body.password = bcrypt.hash(password, 13)
+      const id = req.params.commercialId
+      const com = await userService.getUser(id)
+      if(com) {
+         let model
+         if(com.etatCompte == 'activé') {
+            model = {
+               etatCompte: 'desactivé'
+            }
+         } else {
+            model = {
+               etatCompte: 'activé'
+            }
+         }
+         const user = await userService.updateUser(id, model)
+         res.status(201).json(user)
+      } else {
+         res.status(400).json({message: "Bad Params"})
       }
-      const user = await userService.updateUser(id, req.body)
-      res.status(201).json(user)
    } catch (error) {
       res.status(500).json({'message': 'Internal Server Error'})
    }
@@ -165,5 +179,6 @@ module.exports = {
    register,
    login,
    deleteUser,
-   updateUser
+   updateUser,
+   compteStatusUpdate
 }
