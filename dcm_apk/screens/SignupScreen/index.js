@@ -13,7 +13,7 @@ const SignUpScreen = () => {
     const [address, setAddress] = useState('');
 
     const handleSignUp = async () => {
-        // Exemple de validation côté client
+       
         if (password !== confirmPassword) {
             Alert.alert('Erreur', 'Les mots de passe ne correspondent pas.');
             return;
@@ -28,7 +28,7 @@ const SignUpScreen = () => {
             formData.append('address', address);
 
             // Remplacez cette URL par l'URL de votre endpoint d'inscription
-            const response = await fetch('https://votre-api.com/signup', {
+            const response = await fetch('', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'multipart/form-data',

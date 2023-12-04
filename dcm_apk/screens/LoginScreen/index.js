@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -10,7 +10,7 @@ const LoginScreen = () => {
 
    const handleLogin = async () => {
       try {
-        const response = await fetch('lien de mon api', {
+        const response = await fetch('http://127.0.0.1:5010/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#3b42d1',
-      padding:40
+      padding:40,
+      marginTop:StatusBar.currentHeight
    },
    image: {
       width: '90%',
