@@ -123,6 +123,18 @@ const updateUser = async (req, res) => {
       res.status(500).json({'message': 'Internal Server Error'})
    }
 }
+const promoteCommercial = async (req, res) => {
+   try {
+      const id = req.params.userId
+      if(req.body.password) {
+         req.body.password = bcrypt.hash(password, 13)
+      }
+      const user = await userService.updateUser(id, req.body)
+      res.status(201).json(user)
+   } catch (error) {
+      res.status(500).json({'message': 'Internal Server Error'})
+   }
+}
 
 const deleteUser = async (req, res) => {
    try {
