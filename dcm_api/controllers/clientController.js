@@ -6,7 +6,7 @@ const getClients = async (req, res) => {
       const clients = await clientService.getClients()
       res.status(200).json(clients)
    } catch (error) {
-      res.status(500).json({message: 'Internal server port'})
+      res.status(500).json({message: 'Internal server error'})
    }
 }
 
@@ -27,13 +27,14 @@ const createClient = async (req, res) => {
    try {
       const {clientName, entrepriseName, email, phone, adresse} = req.body
       if(clientName && entrepriseName && email && phone && adresse) {
-         const exist = await clientService.getClientByName(email)
+         const exist = await clientService.getClientByName(entrepriseName)
+         console.log(exist);
          if(exist) {
+            res.status(400).json({message: "Client already exist"})
+         } else {
             const cli = await clientService.register(req.body)
             const cli1 = await mapClientUser(req.params.userId, cli)
             res.status(201).json(cli1)
-         } else {
-            res.status(400).json({message: "Client already exist"})
          }
       } else {
          res.status(400).json({message: "All fields required"})
@@ -70,12 +71,16 @@ const deleteClient = async (req, res) => {
 }
 
 const mapClientUser = async (userId, client) => {
-   const user = await userService.getUser(userId)
-   client.user = user;
-   const cli = await clientService.updateCleint(client._id, client)
-   user.clients.push(client);
-   await userService.updateUser(userId, user)
-   return cli
+   try {
+      const user = await userService.getUser(userId)
+      client.user = user;
+      const cli = await clientService.updateCleint(client._id, client)
+      user.clients.push(client);
+      await userService.updateUser(userId, user)
+      return cli
+   } catch (error) {
+      console.log(error);
+   }
 }
 
 module.exports = {

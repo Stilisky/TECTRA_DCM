@@ -7,6 +7,7 @@ const connectDb = require('./Config/db')
 
 var agencyRouter = require('./routes/agencyRoute');
 var usersRouter = require('./routes/userRoute');
+var clientRouter = require('./routes/clientRoute')
 
 var app = express();
 connectDb()
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 app.use('/api/v1', usersRouter);
 app.use('/api/v1/agency', agencyRouter);
+app.use('/api/v1/clients', clientRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
