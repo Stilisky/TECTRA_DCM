@@ -28,13 +28,21 @@ const createClient = async (req, res) => {
       const {clientName, entrepriseName, email, phone, adresse} = req.body
       if(clientName && entrepriseName && email && phone && adresse) {
          const exist = await clientService.getClientByName(entrepriseName)
-         console.log(exist);
          if(exist) {
             res.status(400).json({message: "Client already exist"})
          } else {
-            const cli = await clientService.register(req.body)
-            const cli1 = await mapClientUser(req.params.userId, cli)
-            res.status(201).json(cli1)
+            const user = await userService.getUser(req.params.userId)
+            const model = {
+               clientName: clientName,
+               entrepriseName: entrepriseName,
+               email: email,
+               phone: phone,
+               adresse: adresse,
+               commercial: user
+            }
+            const cli = await clientService.register(model)
+            await mapClientUser(req.params.userId, cli)
+            res.status(201).json(cli)
          }
       } else {
          res.status(400).json({message: "All fields required"})
@@ -73,11 +81,8 @@ const deleteClient = async (req, res) => {
 const mapClientUser = async (userId, client) => {
    try {
       const user = await userService.getUser(userId)
-      client.user = user;
-      const cli = await clientService.updateCleint(client._id, client)
       user.clients.push(client);
       await userService.updateUser(userId, user)
-      return cli
    } catch (error) {
       console.log(error);
    }

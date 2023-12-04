@@ -16,10 +16,14 @@ const getClientByName = async (name) => {
 }
 
 const register = async (client) => {
-   const newClient = new clientModel(client);
-   const addClient = await newClient.save()
-   const utilisateur = await getUser(addClient._id)
-   return utilisateur;
+   try {
+      const newClient = new clientModel(client);
+      const addClient = await newClient.save()
+      const utilisateur = await getClient(addClient._id)
+      return utilisateur;
+   } catch (error) {
+      console.log(error);
+   }
 }
 
 const updateCleint = async (id, client) => {
