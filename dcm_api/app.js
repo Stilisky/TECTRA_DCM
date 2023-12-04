@@ -1,8 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var cors = require('cors')
 const connectDb = require('./Config/db')
 
 var agencyRouter = require('./routes/agencyRoute');
@@ -12,10 +10,8 @@ var clientRouter = require('./routes/clientRoute')
 var app = express();
 connectDb()
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cors());
+app.use(express.json({ extended: false }));
 
 app.use('/api/v1', usersRouter);
 app.use('/api/v1/agency', agencyRouter);
