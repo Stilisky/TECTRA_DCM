@@ -8,6 +8,7 @@ var usersRouter = require('./routes/userRoute');
 var clientRouter = require('./routes/clientRoute')
 var categoryRouter = require('./routes/categoryRoute')
 var productRouter = require('./routes/productRoute')
+var saleRouter = require('./routes/saleRoute')
 
 var app = express();
 connectDb()
@@ -20,6 +21,7 @@ app.use('/api/v1/agency', agencyRouter);
 app.use('/api/v1/clients', clientRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/products', productRouter);
+app.use('/api/v1/sales', saleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
