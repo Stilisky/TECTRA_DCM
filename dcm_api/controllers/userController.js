@@ -165,12 +165,16 @@ const deleteUser = async (req, res) => {
 }
 
 const mapUserAgency = async (agencyId, user) => {
-   const agency = await agencyService.getAgency(agencyId)
-   user.agency = agency
-   await userService.updateUser(user._id, user)
-   // agency.users.push(user)
-   // console.log(agency);
-   // await agencyService.updateAgency(agency._id, agency)
+   try {
+      const agency = await agencyService.getAgency(agencyId)
+      agency.users.push(user)
+      console.log(agency);
+      await agencyService.updateAgency(agency._id, agency)
+      user.agency = agency
+      await userService.updateUser(user._id, user)
+   } catch (error) {
+      console.log(error);
+   }
 }
 
 module.exports = {
