@@ -94,7 +94,7 @@ const login = async (req, res) => {
                      role: user.role
                   },
                   process.env.SECRET_KEY,
-                  {expiresIn: '5h'}
+                  {expiresIn: '8h'}
                )
                res.status(200).json({'email': user.email, 'name': user.name, 'lastName': user.lastName, adresse: user.adress, agency: user.agency, 'acces_token': token})
             } else {
@@ -142,8 +142,9 @@ const mapUserAgency = async (agencyId, user) => {
    const agency = await agencyService.getAgency(agencyId)
    user.agency = agency
    await userService.updateUser(user._id, user)
-   agency.users.push(user)
-   await agencyService.updateAgency(agencyId, agency)
+   // agency.users.push(user)
+   // console.log(agency);
+   // await agencyService.updateAgency(agency._id, agency)
 }
 
 module.exports = {

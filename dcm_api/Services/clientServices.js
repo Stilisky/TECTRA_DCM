@@ -1,17 +1,17 @@
 const clientModel = require('../models/Client')
 
 const getClients = async () => {
-   const clients = await clientModel.find().populate('commercial').populate('purchases')
+   const clients = await clientModel.find().populate('commercial')
    return clients;
 }
 
 const getClient = async (ClientId) => {
-   const client = await clientModel.findById(ClientId).populate('commercial').populate('purchases')
+   const client = await clientModel.findById(ClientId).populate('commercial')
    return client;
 }
 
 const getClientByName = async (name) => {
-   const client = await clientModel.findOne({entrepriseName: name}).populate('commercial').populate('purchases')
+   const client = await clientModel.findOne({entrepriseName: name})
    return client;
 }
 
