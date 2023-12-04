@@ -1,8 +1,8 @@
-// SignUpScreen.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Picker } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { API_URL } from '../../utils/constantes';
 
 const SignUpScreen = () => {
     const navigation = useNavigation();
@@ -11,24 +11,46 @@ const SignUpScreen = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
+    const [selectedAgency, setSelectedAgency] = useState('');
+    const [agencies, setAgencies] = useState([]); // Array to store agencies fetched from backend
+
+    
+
+    // Fetch the list of agencies when the component mounts
+    useEffect(() => {
+        fetchAgencies();
+    }, []);
+
+    const fetchAgencies = async () => {
+        try {
+            const url=`${API_URL}/login`
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                setAgencies(data); 
+            } else {
+                console.error('Error fetching agencies:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching agencies:', error.message);
+        }
+    };
 
     const handleSignUp = async () => {
-       
         if (password !== confirmPassword) {
             Alert.alert('Erreur', 'Les mots de passe ne correspondent pas.');
             return;
         }
 
         try {
-            // Construire un objet FormData pour envoyer les données incluant le fichier image
             const formData = new FormData();
             formData.append('email', email);
             formData.append('password', password);
             formData.append('phoneNumber', phoneNumber);
             formData.append('address', address);
+            formData.append('selectedAgency', selectedAgency);
 
-            // Remplacez cette URL par l'URL de votre endpoint d'inscription
-            const response = await fetch('', {
+            const response = await fetch('http://your-backend-url/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -37,7 +59,6 @@ const SignUpScreen = () => {
             });
 
             if (response.ok) {
-                // Naviguer vers l'écran de connexion après l'inscription réussie
                 navigation.navigate('Login');
             } else {
                 const errorData = await response.json();
@@ -51,9 +72,8 @@ const SignUpScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>SIGNUP</Text>
-            
+
             <Image style={styles.image} source={require('../../assets/im1.jpeg')} />
-            
 
             {/* Champ de saisie pour l'email avec icône */}
             <View style={styles.inputContainer}>
@@ -115,6 +135,21 @@ const SignUpScreen = () => {
                 />
             </View>
 
+            {/* Dropdown/select field for agency selection */}
+            <View style={styles.inputContainer}>
+                <FontAwesome5 name="building" size={20} color="#333" style={styles.icon} />
+                <Picker
+                    style={styles.input}
+                    selectedValue={selectedAgency}
+                    onValueChange={(itemValue) => setSelectedAgency(itemValue)}
+                >
+                    <Picker.Item label="Select Agency" value="" />
+                    {agencies.map((agency) => (
+                        <Picker.Item key={agency.id} label={agency.name} value={agency.id.toString()} />
+                    ))}
+                </Picker>
+            </View>
+
             <TouchableOpacity style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.buttonText}>S'INSCRIRE</Text>
             </TouchableOpacity>
@@ -129,7 +164,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#3b42d1',
         paddingHorizontal: 16,
-        padding:40
+        padding: 40
     },
     image: {
         width: '90%',
@@ -139,9 +174,9 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 70,
-      marginBottom: 16,
-      textAlign: 'center',
-      color:'#fff',
+        marginBottom: 16,
+        textAlign: 'center',
+        color: '#fff',
     },
     inputContainer: {
         flexDirection: 'row',

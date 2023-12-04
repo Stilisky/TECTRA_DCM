@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar,Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { API_URL } from '../../utils/constantes';
 
 const LoginScreen = () => {
    const navigation = useNavigation();
@@ -10,7 +11,8 @@ const LoginScreen = () => {
 
    const handleLogin = async () => {
       try {
-         const response = await fetch('http://127.0.0.1:5010/api/v1/login', {
+         const url=`${API_URL}/login`
+         const response = await fetch( url, {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
@@ -22,10 +24,15 @@ const LoginScreen = () => {
          });
    
          if (response.ok) {
+
+            const responseData = await response.json();
+            // Store the token in AsyncStorage
+            await AsyncStorage.setItem('token', responseData.token);
+
+            
             navigation.navigate('Home');
          } else {
             const errorData = await response.json();
-            console.error('Error:', errorData.message || 'An error occurred during login.');
             Alert.alert('Error', errorData.message || 'An error occurred during login.');
          }
       } catch (error) {

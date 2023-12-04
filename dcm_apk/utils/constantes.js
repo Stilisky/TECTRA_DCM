@@ -1,0 +1,1 @@
+export const API_URL="http://10.50.5.9:5010/api/v1"
