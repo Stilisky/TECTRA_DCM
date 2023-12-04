@@ -25,10 +25,10 @@ const getProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
    try {
-      const {name, price, quantity, availableQty} = req.body
-      if(name && price && quantity && availableQty) {
+      const {name, price, quantity} = req.body
+      if(name && price && quantity) {
          const prod = await productService.createProduct(req.body)
-         const up = mapProdCategory(req.params.catId, prod)
+         const up = await mapProdCategory(req.params.catId, prod)
          res.status(201).json(up)
       } else {
          res.status(400).json({message: "All fields are required"})
@@ -65,12 +65,16 @@ const deleteProduct = async (req, res) => {
 }
 
 const mapProdCategory = async (catId, prod) => {
-   const cat = await categoryService.getCategory(catId)
-   cat.products.push(prod)
-   await categoryService.updateCategory(catId, cat)
-   prod.category = cat
-   const up = await productService.updateProd(prod._id, prod)
-   return up; 
+   try {
+      const cat = await categoryService.getCategory(catId)
+      cat.products.push(prod)
+      await categoryService.updateCategory(catId, cat)
+      prod.category = cat
+      const up = await productService.updateProd(prod._id, prod)
+      return up; 
+   } catch (error) {
+      console.log(error);
+   }
 }
 
 module.exports = {
