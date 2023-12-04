@@ -6,6 +6,7 @@ const connectDb = require('./Config/db')
 var agencyRouter = require('./routes/agencyRoute');
 var usersRouter = require('./routes/userRoute');
 var clientRouter = require('./routes/clientRoute')
+var categoryRouter = require('./routes/categoryRoute')
 
 var app = express();
 connectDb()
@@ -16,6 +17,7 @@ app.use(express.json({ extended: false }));
 app.use('/api/v1', usersRouter);
 app.use('/api/v1/agency', agencyRouter);
 app.use('/api/v1/clients', clientRouter);
+app.use('/api/v1/category', categoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

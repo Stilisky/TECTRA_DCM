@@ -1,12 +1,12 @@
 const categoryModel = require('../models/Category');
 
 const getCategories = async () => {
-   const cats = await categoryModel.find().populate('products')
+   const cats = await categoryModel.find()
    return cats;
 }
 
 const getCategory = async (catId) => {
-   const cat = await categoryModel.findById(catId).populate('products')
+   const cat = await categoryModel.findById(catId)
    return cat;
 }
 

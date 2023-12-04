@@ -168,7 +168,6 @@ const mapUserAgency = async (agencyId, user) => {
    try {
       const agency = await agencyService.getAgency(agencyId)
       agency.users.push(user)
-      console.log(agency);
       await agencyService.updateAgency(agency._id, agency)
       user.agency = agency
       await userService.updateUser(user._id, user)
