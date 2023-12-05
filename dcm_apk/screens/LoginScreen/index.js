@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar,Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { API_URL } from '../../utils/constantes';
@@ -11,8 +11,8 @@ const LoginScreen = () => {
 
    const handleLogin = async () => {
       try {
-         const url=`${API_URL}/login`
-         const response = await fetch( url, {
+         const url = `${API_URL}/login`
+         const response = await fetch(url, {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
@@ -22,14 +22,14 @@ const LoginScreen = () => {
                password: password,
             }),
          });
-   
+
          if (response.ok) {
 
             const responseData = await response.json();
             // Store the token in AsyncStorage
             await AsyncStorage.setItem('token', responseData.token);
 
-            
+
             navigation.navigate('Home');
          } else {
             const errorData = await response.json();
@@ -46,48 +46,44 @@ const LoginScreen = () => {
    };
 
    return (
+
       <View style={styles.container}>
+            <Text style={styles.title}>LOGIN</Text>
+            <Image style={styles.image} source={require('../../assets/im1.jpeg')} />
 
 
-         <Text style={styles.title}>LOGIN</Text>
-         <Image style={styles.image} source={require('../../assets/im1.jpeg')} />
+            {/* Champ de saisie pour l'email avec icône */}
+            <View style={styles.inputContainer}>
+               <FontAwesome5 name="envelope" size={20} color="#333" style={styles.icon} />
+               <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+               />
+            </View>
+
+            {/* Champ de saisie pour le mot de passe avec icône */}
+            <View style={styles.inputContainer}>
+               <FontAwesome5 name="lock" size={20} color="#333" style={styles.icon} />
+               <TextInput
+                  style={styles.input}
+                  placeholder="Mot de passe"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+               />
+            </View>
+
+            {/* Bouton de connexion avec TouchableOpacity */}
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+               <Text style={styles.buttonText}>SE CONNECTER</Text>
+            </TouchableOpacity>
 
 
-         {/* Champ de saisie pour l'email avec icône */}
-         <View style={styles.inputContainer}>
-            <FontAwesome5 name="envelope" size={20} color="#333" style={styles.icon} />
-            <TextInput
-               style={styles.input}
-               placeholder="Email"
-               value={email}
-               onChangeText={(text) => setEmail(text)}
-               keyboardType="email-address"
-               autoCapitalize="none"
-            />
-         </View>
-
-         {/* Champ de saisie pour le mot de passe avec icône */}
-         <View style={styles.inputContainer}>
-            <FontAwesome5 name="lock" size={20} color="#333" style={styles.icon} />
-            <TextInput
-               style={styles.input}
-               placeholder="Mot de passe"
-               secureTextEntry
-               value={password}
-               onChangeText={(text) => setPassword(text)}
-            />
-         </View>
-
-         {/* Bouton de connexion avec TouchableOpacity */}
-         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>SE CONNECTER</Text>
-         </TouchableOpacity>
-
-         {/* Bouton pour aller à l'écran d'inscription */}
-         <TouchableOpacity onPress={handleSignUp}>
-            <Text><Text style={{fontSize:18}}>Pas encore de compte? Inscrivez-vous </Text><Text style={styles.signUpText}>ICI</Text></Text>
-
-         </TouchableOpacity>
+     
       </View>
    );
 };
@@ -98,21 +94,21 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#3b42d1',
-      padding:40,
-      marginTop:StatusBar.currentHeight
+      padding: 40,
+      marginTop: StatusBar.currentHeight
    },
    image: {
       width: '90%',
       height: '40%',
-      
+
       margin: 16,
-      borderRadius:900
+      borderRadius: 900
    },
    title: {
       fontSize: 70,
       marginBottom: 16,
       textAlign: 'center',
-      color:'#fff'
+      color: '#fff'
    },
    inputContainer: {
       flexDirection: 'row',
