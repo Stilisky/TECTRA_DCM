@@ -51,6 +51,10 @@ const UserSchema = new mongoose.Schema({
    clients : [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Client'
+   }],
+   ventes : [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Vente'
    }]
 })
 

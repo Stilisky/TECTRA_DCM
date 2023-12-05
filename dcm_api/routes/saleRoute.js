@@ -11,6 +11,6 @@ const {
 
 router.route('/').get(authAdmin, getSales)
 router.route('/saleId').get(auth, getSale).put(auth, updateSale).delete(authAdmin, deleteSale)
-router.route('/client/clientId').post(createSale)
+router.route('/client/:clientId').post(createSale)
 
 module.exports = router
