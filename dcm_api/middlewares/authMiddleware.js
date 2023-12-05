@@ -63,7 +63,7 @@ const auth = async (req, res, next) => {
             return res.status(401).json({message: 'Invalid token'})
          }
          else{
-            if(decodedToken.role == "ADMIN" || (decodedToken.role == "COMMERCIAL" && decodedToken.etatCompte == 'activé')) {
+            if(decodedToken.role == "ADMIN" || decodedToken.role == "COMMERCIAL") {
                req.params.userId = decodedToken.id
                next()
             }else {
