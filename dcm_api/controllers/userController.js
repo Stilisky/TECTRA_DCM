@@ -27,7 +27,7 @@ const getUser = async (req, res) => {
 
 const register = async (req, res) => {
    try {
-      const {name, lastName, phone, adress, email, password, agency} = req.body
+      const {name, lastName, phone, adress, email, password} = req.body
       if (name && lastName && email && password && phone && adress){
          if(emailRegex.test(email)){
             if(usernameRegex.test(name)){
@@ -41,7 +41,8 @@ const register = async (req, res) => {
                      email: email,
                      password: newPassword,
                      phone: phone,
-                     adress: adress
+                     adress: adress,
+                     etatCompte: 'activé'
                   }
                } else {
                   model = {
@@ -59,13 +60,11 @@ const register = async (req, res) => {
                if(exist){
                   res.status(400).json({"message": "Email already exist"})
                } else {
-                  if(agency){
-                     const user = await userService.register(model)
-                     await mapUserAgency(agency, user)
-                     res.status(201).json(user)
-                  } else {
-                     res.status(400).json({'message': 'Agency is required'})
-                  }
+                  const user = await userService.register(model)
+                  res.status(201).json(user)
+                  // if(agency){
+                     //    await mapUserAgency(agency, user)
+                  // }
                }
             } else {
                res.status(400).json({'message': 'Invalid Username format'})
@@ -98,7 +97,7 @@ const login = async (req, res) => {
                   process.env.SECRET_KEY,
                   {expiresIn: '8h'}
                )
-               res.status(200).json({'email': user.email, 'name': user.name, 'lastName': user.lastName, adresse: user.adress, agency: user.agency, 'acces_token': token})
+               res.status(200).json({'email': user.email, 'name': user.name, 'lastName': user.lastName, adresse: user.adress, 'acces_token': token})
             } else {
                res.status(400).json({'message': 'Incorrect Email or Password'})
             }
