@@ -1,55 +1,49 @@
-// Importations nécessaires
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+// ProfilScreen.js
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfilScreen = ({ navigation }) => {
+const ProfilScreen = ({ navigation, route }) => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    handleLogout();
-   
-    fetchUserData();
-  }, []); 
+    loadUserData();
+  }, []);
 
-  const fetchUserData = async () => {
+  const loadUserData = useCallback(async () => {
     try {
-      const storedUserData = await AsyncStorage.getItem('userData');
-      console.log(storedUserData);
-      if (storedUserData) {
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserData(parsedUserData);
+      const userDataString = await AsyncStorage.getItem('userData');
+      if (userDataString) {
+        const userData = JSON.parse(userDataString);
+        setUserData(userData);
       }
     } catch (error) {
-      console.error('Error fetching user data:', error.message);
+      console.error('Erreur lors du chargement des données de l\'utilisateur :', error.message);
     }
-  };
+  }, []);
 
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('userData');
-      
+      route.params.setLoggedIn(false);
       navigation.navigate('login');
     } catch (error) {
-      console.error('Error logging out:', error.message);
+      console.error('Erreur lors de la déconnexion :', error.message);
     }
   };
 
   return (
     <View style={styles.container}>
-      {console.log(userData)}
       {userData ? (
         <>
-          <Text style={styles.text}>Nom du commercial: {userData.name}</Text>
-          <Text style={styles.text}>Email: {userData.email}</Text>
-          {/* Ajoutez d'autres informations de profil que vous souhaitez afficher */}
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Text style={styles.logoutButtonText}>Déconnexion</Text>
-          </TouchableOpacity>
+          <Text style={styles.title}>Profil de {userData.username}</Text>
+          <Text>Email: {userData.email}</Text>
+          <Button title="Se déconnecter" onPress={handleLogout} />
         </>
       ) : (
-        <Text style={styles.text}>Chargement des données du profil...</Text>
+        <Text>Chargement du profil...</Text>
       )}
     </View>
   );
@@ -61,20 +55,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  logoutButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: 'red',
-    borderRadius: 5,
-  },
-  logoutButtonText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
   },
 });
 

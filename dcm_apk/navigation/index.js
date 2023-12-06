@@ -1,7 +1,7 @@
 // AppNavigator.js
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,62 +12,69 @@ import ProfilScreen from '../screens/ProfilScreen';
 import LoginScreen from '../screens/LoginScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const AuthStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} />
+      {/* Ajoutez d'autres écrans de connexion au besoin */}
+    </Stack.Navigator>
+  );
+};
 
 const AppNavigator = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
-  const checkIfUserIsLoggedIn = async () => {
+  const checkIfUserIsLoggedIn = useCallback(async () => {
     try {
       const token = await AsyncStorage.getItem('token');
       setLoggedIn(!!token);
     } catch (error) {
-      // Set loggedIn to false if there is an error retrieving the token
       setLoggedIn(false);
-      console.error('Error checking if user is logged in:', error.message);
+      console.error('Erreur lors de la vérification de la connexion :', error.message);
     }
-  };
-  
+  }, []);
 
   useEffect(() => {
     checkIfUserIsLoggedIn();
-  }, []);
+  }, [checkIfUserIsLoggedIn]);
 
   if (isLoggedIn) {
     return (
-        <Tab.Navigator>
-          <Tab.Screen
-            name="ACCUEIL"
-            component={HomeScreen}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <FontAwesome5 name="home" color={color} size={size} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Vente"
-            component={VenteScreen}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <FontAwesome5 name="shopping-cart" color={color} size={size} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Profil"
-            component={ProfilScreen}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <FontAwesome5 name="user" color={color} size={size} />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      
+      <Tab.Navigator>
+        <Tab.Screen
+          name="home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome5 name="home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Vente"
+          component={VenteScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome5 name="shopping-cart" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profil"
+          component={ProfilScreen}
+          initialParams={{ setLoggedIn }}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome5 name="user" color={color} size={size} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     );
   } else {
-    // Show the login screen if the user is not logged in
-    return <LoginScreen />;
+    return <AuthStack />;
   }
 };
 

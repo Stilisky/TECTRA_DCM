@@ -1,5 +1,4 @@
 // LoginScreen.js
-
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -32,11 +31,9 @@ const LoginScreen = () => {
 
         if (responseData.acces_token) {
           await AsyncStorage.setItem('token', responseData.acces_token);
+          await AsyncStorage.setItem('userData', JSON.stringify(responseData));
 
-            await AsyncStorage.setItem('userData', JSON.stringify(responseData));
-          
-
-          navigation.navigate('Home');
+          navigation.navigate('home');
         } else {
           Alert.alert('Error', 'Token is missing in the response data.');
         }
