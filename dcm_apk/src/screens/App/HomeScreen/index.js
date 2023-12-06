@@ -3,14 +3,14 @@ import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList } from 'react
 
 export default function HomeScreen() {
   const products = [
-    { id: '1', title: 'SAC DE RIZ ', price: '25000FCFA ', image: require('../../assets/sacderiz.avif') },
-    { id: '2', title: ' CEREALES', price: '650FCFA', image: require('../../assets/cereales.avif') },
-    { id: '3', title: ' Riz parfume', price: '1000 FCFA', image: require('../../assets/rizcuit.avif') },
+    { id: '1', title: 'SAC DE RIZ ', price: '25000FCFA ', image: require('../../../assets/sacderiz.avif') },
+    { id: '2', title: ' CEREALES', price: '650FCFA', image: require('../../../assets/cereales.avif') },
+    { id: '3', title: ' Riz parfume', price: '1000 FCFA', image: require('../../../assets/rizcuit.avif') },
 
 
-    { id: '4', title: 'TULE ONDULEE', price: '5500FCFA', image: require('../../assets/tule.avif') },
-    { id: '5', title: 'TUYAU PVC', price: '12000 FCFA ', image: require('../../assets/tuyau.avif') },
-    { id: '6', title: 'SACS DAMME', price: '35000FCFA', image: require('../../assets/1.avif') },
+    { id: '4', title: 'TULE ONDULEE', price: '5500FCFA', image: require('../../../assets/tule.avif') },
+    { id: '5', title: 'TUYAU PVC', price: '12000 FCFA ', image: require('../../../assets/tuyau.avif') },
+    { id: '6', title: 'SACS DAMME', price: '35000FCFA', image: require('../../../assets/1.avif') },
     // Ajoutez autant d'éléments que nécessaire
   ];
 
