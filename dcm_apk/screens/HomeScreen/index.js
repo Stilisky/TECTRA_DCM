@@ -1,84 +1,90 @@
-// HomeScreen.js
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet ,Button} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 
-const HomeScreen = () => {
-    const navigation = useNavigation();
+export default function HomeScreen() {
+  const products = [
+    { id: '1', title: 'SAC DE RIZ ', price: '25000FCFA ', image: require('../../assets/sacderiz.avif') },
+    { id: '2', title: ' CEREALES', price: '650FCFA', image: require('../../assets/cereales.avif') },
+    { id: '3', title: ' Riz parfume', price: '1000 FCFA', image: require('../../assets/rizcuit.avif') },
 
-    const goToAppointments = () => {
-        // Naviguer vers l'écran de gestion des rendez-vous
-        navigation.navigate('Appointments');
-    };
 
-    const goToProspects = () => {
-        // Naviguer vers l'écran de gestion des prospects
-        navigation.navigate('Prospects');
-    };
+    { id: '4', title: 'TULE ONDULEE', price: '5500FCFA', image: require('../../assets/tule.avif') },
+    { id: '5', title: 'TUYAU PVC', price: '12000 FCFA ', image: require('../../assets/tuyau.avif') },
+    { id: '6', title: 'SACS DAMME', price: '35000FCFA', image: require('../../assets/1.avif') },
+    // Ajoutez autant d'éléments que nécessaire
+  ];
 
-    const goToActivities = () => {
-        // Naviguer vers l'écran de l'historique des activités
-        navigation.navigate('Activities');
-    };
+  const renderProductItem = ({ item }) => (
+    <View style={styles.productContainer}>
+      <Image style={styles.productImage} source={item.image} />
+      <Text style={styles.productTitle}>{item.title}</Text>
+      <Text style={styles.productPrice}>{item.price}</Text>
+      <TouchableOpacity
+        style={styles.buyButton}
+        onPress={() => { /* Code to run when the "Acheter" button is pressed */ }}
+      >
+        <Text style={styles.buyButtonText}>Acheter</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
-    const goToGoals = () => {
-        // Naviguer vers l'écran des objectifs
-        navigation.navigate('Goals');
-    };
-
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Bienvenue sur l'écran d'accueil</Text>
-            <Text>Home!</Text>
-            <Button
-                title="Go to Settings"
-                onPress={() => navigation.navigate('Vente')}
-            />
-
-            <TouchableOpacity style={styles.button} onPress={goToAppointments}>
-                <Text style={styles.buttonText}>Gestion des Rendez-vous</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button} onPress={goToProspects}>
-                <Text style={styles.buttonText}>Gestion des Prospects</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button} onPress={goToActivities}>
-                <Text style={styles.buttonText}>Historique des Activités</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button} onPress={goToGoals}>
-                <Text style={styles.buttonText}>Objectifs</Text>
-            </TouchableOpacity>
-        </View>
-    );
-};
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={products}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        renderItem={renderProductItem}
+        contentContainerStyle={styles.productsList}
+      />
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#3b42d1',
-    },
-    title: {
-        fontSize: 30,
-        marginBottom: 16,
-        textAlign: 'center',
-        color: '#fff',
-    },
-    button: {
-        backgroundColor: '#000',
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 5,
-        marginVertical: 10,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        textAlign: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  productsList: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  productContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    margin: 8,
+    overflow: 'hidden',
+  },
+  productImage: {
+    width: '100%',
+    height: 150,
+    resizeMode: 'cover',
+  },
+  productTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 8,
+    paddingHorizontal: 8,
+  },
+  productPrice: {
+    fontSize: 14,
+    color: '#888',
+    paddingHorizontal: 8,
+  },
+  buyButton: {
+    backgroundColor: '#4a69bd',
+    padding: 10,
+    borderRadius: 4,
+    margin: 8,
+    alignItems: 'center',
+  },
+  buyButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
-
-export default HomeScreen;
