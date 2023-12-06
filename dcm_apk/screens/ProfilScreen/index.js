@@ -27,8 +27,7 @@ const ProfilScreen = ({ navigation, route }) => {
     try {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('userData');
-      route.params.setLoggedIn(false);
-      navigation.navigate('login');
+      navigation.replace('login');  // Utilisez la navigation directe ici
     } catch (error) {
       console.error('Erreur lors de la déconnexion :', error.message);
     }
@@ -40,6 +39,7 @@ const ProfilScreen = ({ navigation, route }) => {
         <>
           <Text style={styles.title}>Profil de {userData.username}</Text>
           <Text>Email: {userData.email}</Text>
+          {/* Affichez d'autres informations sur le profil de l'utilisateur au besoin */}
           <Button title="Se déconnecter" onPress={handleLogout} />
         </>
       ) : (

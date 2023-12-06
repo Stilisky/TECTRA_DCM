@@ -10,6 +10,7 @@ import HomeScreen from '../screens/HomeScreen';
 import VenteScreen from '../screens/VenteScreen';
 import ProfilScreen from '../screens/ProfilScreen';
 import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -64,13 +65,14 @@ const AppNavigator = () => {
         <Tab.Screen
           name="Profil"
           component={ProfilScreen}
-          initialParams={{ setLoggedIn }}
+          initialParams={{ setLoggedIn: setLoggedIn }}
           options={{
             tabBarIcon: ({ color, size }) => (
               <FontAwesome5 name="user" color={color} size={size} />
             ),
           }}
         />
+
       </Tab.Navigator>
     );
   } else {
