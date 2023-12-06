@@ -27,7 +27,7 @@ const ProfilScreen = ({ navigation, route }) => {
     try {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('userData');
-      navigation.replace('login');  // Utilisez la navigation directe ici
+      navigation.navigate('login');  // Utilisez la navigation directe ici
     } catch (error) {
       console.error('Erreur lors de la déconnexion :', error.message);
     }

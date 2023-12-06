@@ -18,8 +18,7 @@ const Stack = createStackNavigator();
 const AuthStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      {/* Ajoutez d'autres écrans de connexion au besoin */}
+      <Stack.Screen name="Login" component={LoginScreen} screenOptions={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

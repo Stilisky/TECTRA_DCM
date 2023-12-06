@@ -28,12 +28,13 @@ const LoginScreen = () => {
 
       if (response.ok) {
         const responseData = await response.json();
+        console.log(responseData);
 
         if (responseData.acces_token) {
           await AsyncStorage.setItem('token', responseData.acces_token);
           await AsyncStorage.setItem('userData', JSON.stringify(responseData));
 
-          navigation.navigate('Vente');
+          navigation.navigate("home");
         } else {
           Alert.alert('Error', 'Token is missing in the response data.');
         }

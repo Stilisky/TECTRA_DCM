@@ -23,6 +23,12 @@ const VenteScreen = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setFormData({
+      clientName: '',
+      productName: '',
+      quantity: '',
+      unitPrice: '',
+    });
   };
 
   const handleSaveSale = async () => {
@@ -32,7 +38,7 @@ const VenteScreen = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${await AsyncStorage.getItem('token')}`, // Ajoutez le jeton d'authentification
+          Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
         },
         body: JSON.stringify({
           ...formData,
@@ -42,13 +48,7 @@ const VenteScreen = () => {
       if (response.ok) {
         const newSale = await response.json();
         setSalesList([...salesList, newSale]);
-        setFormData({
-          clientName: '',
-          productName: '',
-          quantity: '',
-          unitPrice: '',
-        });
-        setShowModal(false);
+        handleCloseModal();
       } else {
         console.error('Error during sale recording:', response.statusText);
       }
@@ -83,11 +83,6 @@ const VenteScreen = () => {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <TouchableOpacity onPress={handleShowModal} style={styles.addButton}>
-        <FontAwesome5 name="plus" size={24} color="white" />
-      </TouchableOpacity>
-
-      <Text>Liste des ventes de la semaine :</Text>
       <FlatList
         data={salesList}
         keyExtractor={(item) => item.id.toString()}
@@ -97,35 +92,68 @@ const VenteScreen = () => {
             <Text>Client: {item.clientName}</Text>
             <Text>Produit: {item.productName}</Text>
             <Text>Quantité: {item.quantity}</Text>
+            <Text>Prix unitaire: {item.unitPrice}</Text>
           </View>
         )}
       />
 
+      {/* Modal */}
       <Modal visible={showModal} animationType="slide" transparent>
-        <View style={[styles.modalContainer, { zIndex: 1 }]}>
+        <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Formulaire d'enregistrement de vente</Text>
-            <TextInput
-              placeholder="Nom du client"
-              value={formData.clientName}
-              onChangeText={(text) => setFormData({ ...formData, clientName: text })}
-            />
-            <TextInput
-              placeholder="Nom du produit"
-              value={formData.productName}
-              onChangeText={(text) => setFormData({ ...formData, productName: text })}
-            />
-            <TextInput
-              placeholder="Quantité"
-              value={formData.quantity}
-              onChangeText={(text) => setFormData({ ...formData, quantity: text })}
-              keyboardType="numeric"
-            />
+            <Text style={styles.modalTitle}>FORMULAIRE ENEGISTREMENT D'UNE VENTE</Text>
+
+            <View style={styles.formGroup}>
+              <FontAwesome5 name="user" style={styles.icon} />
+              <TextInput
+                placeholder="Nom du client"
+                value={formData.clientName}
+                onChangeText={(text) => setFormData({ ...formData, clientName: text })}
+                style={styles.input}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <FontAwesome5 name="tag" style={styles.icon} />
+              <TextInput
+                placeholder="Nom du produit"
+                value={formData.productName}
+                onChangeText={(text) => setFormData({ ...formData, productName: text })}
+                style={styles.input}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <FontAwesome5 name="cube" style={styles.icon} />
+              <TextInput
+                placeholder="Quantité"
+                value={formData.quantity}
+                onChangeText={(text) => setFormData({ ...formData, quantity: text })}
+                keyboardType="numeric"
+                style={styles.input}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <FontAwesome5 name="money-bill" style={styles.icon} />
+              <TextInput
+                placeholder="Prix unitaire"
+                value={formData.unitPrice}
+                onChangeText={(text) => setFormData({ ...formData, unitPrice: text })}
+                keyboardType="numeric"
+                style={styles.input}
+              />
+            </View>
+
             <Button title="Enregistrer la vente" onPress={handleSaveSale} />
             <Button title="Fermer" onPress={handleCloseModal} />
           </View>
         </View>
       </Modal>
+
+      <TouchableOpacity onPress={handleShowModal} style={styles.addButton}>
+        <FontAwesome5 name="plus" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -149,6 +177,27 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  formGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  icon: {
+    marginRight: 8,
+    fontSize: 20,
+    color: 'gray',
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
   },
   saleItem: {
     borderBottomWidth: 1,

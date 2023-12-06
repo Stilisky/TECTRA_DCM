@@ -1,6 +1,6 @@
 // HomeScreen.js
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet ,Button} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
@@ -29,6 +29,11 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Bienvenue sur l'écran d'accueil</Text>
+            <Text>Home!</Text>
+            <Button
+                title="Go to Settings"
+                onPress={() => navigation.navigate('Vente')}
+            />
 
             <TouchableOpacity style={styles.button} onPress={goToAppointments}>
                 <Text style={styles.buttonText}>Gestion des Rendez-vous</Text>
