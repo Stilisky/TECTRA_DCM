@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList, StatusBar } from 'react-native';
+import { fonts, sizes } from '../../../components/utils/theme';
 
 export default function HomeScreen() {
   const products = [
@@ -30,6 +31,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Liste des Produits</Text>
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
@@ -44,7 +46,15 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: StatusBar.currentHeight,
     backgroundColor: '#fff',
+  },
+  title:{
+    marginTop: 20,
+    textAlign: 'center',
+    fontFamily: fonts.font700,
+    fontSize: sizes.xxl,
+    color: 'blue'
   },
   productsList: {
     paddingHorizontal: 16,
