@@ -45,8 +45,6 @@ export const UserProvider = ({ children }) => {
             email: data.email,
             password: data.password
          }
-         console.log(API_URL);
-         console.log(body);
          const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -56,7 +54,6 @@ export const UserProvider = ({ children }) => {
          if (response.ok) {
             const data = await response.json();
             await AsyncStorage.setItem("token", data.acces_token);
-            console.log(data);
             setUser(data);
          } else {
             console.log("not work");

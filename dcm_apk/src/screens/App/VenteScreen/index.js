@@ -1,11 +1,12 @@
 // VenteScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput, Button, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput, Button, FlatList, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_URL, SCREEN } from '../../../components/utils/constantes';
+import { SCREEN } from '../../../components/utils/constantes';
 import SaleModale from '../../../components/ui/SaleModale';
+import { fonts } from '../../../components/utils/theme';
+import SaleCard from '../../../components/ui/SaleCard';
 
 const VenteScreen = () => {
   const navigation = useNavigation();
@@ -20,52 +21,59 @@ const VenteScreen = () => {
   
 
   useEffect(() => {
-    const fetchSales = async () => {
-      try {
-        const salesUrl = `${API_URL}/sales`;
-        const response = await fetch(salesUrl, {
-          headers: {
-            Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-          },
-        });
+    // const fetchSales = async () => {
+    //   try {
+    //     const salesUrl = `${API_URL}/sales`;
+    //     const response = await fetch(salesUrl, {
+    //       headers: {
+    //         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+    //       },
+    //     });
 
-        if (response.ok) {
-          const salesData = await response.json();
-          setSalesList(salesData);
-        } else {
-          console.error('Error fetching sales:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error fetching sales:', error.message);
-      }
-    };
+    //     if (response.ok) {
+    //       const salesData = await response.json();
+    //       setSalesList(salesData);
+    //     } else {
+    //       console.error('Error fetching sales:', response.statusText);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching sales:', error.message);
+    //   }
+    // };
 
-    fetchSales();
+    // fetchSales();
   }, []);
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <FlatList
-        data={salesList}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.saleItem}>
-            <Text>Date: {item.date}</Text>
-            <Text>Client: {item.clientName}</Text>
-            <Text>Produit: {item.productName}</Text>
-            <Text>Quantité: {item.quantity}</Text>
-            <Text>Prix unitaire: {item.unitPrice}</Text>
-          </View>
-        )}
-      />
+    <>
+    <SafeAreaView style={{ flex: 1, marginTop: StatusBar.currentHeight}}>
+      <ScrollView>
+        <View style={{ flexDirection:'row', justifyContent:'space-between', marginTop: 15, paddingHorizontal:5}}>
+          <Text style={{ fontFamily: fonts.font600, marginLeft: 10, fontSize: 18}}>Mes 10 dernières ventes</Text>
+          <TouchableOpacity style={{ marginRight:10 }}>
+            <Text style={{ color: 'blue', fontSize: 18, fontFamily: fonts.font600, textDecorationLine: 'underline'}}>Voir Tout</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Modal */}
-      <SaleModale showModal={showModal}/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        <SaleCard/>
+        {/* Modal */}
 
+      </ScrollView>
       <TouchableOpacity onPress={handleShowModal} style={styles.addButton}>
         <FontAwesome5 name="plus" size={24} color="white" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
+    <SaleModale showModal={showModal} closeModal={() => setShowModal(false)}/>
+    </>
   );
 };
 

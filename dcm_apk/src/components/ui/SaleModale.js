@@ -1,47 +1,51 @@
-import { View, Text, Modal, TextInput, StyleSheet } from 'react-native'
+import { View, Text, Modal, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { SCREEN } from '../utils/constantes'
+import { API_URL, SCREEN } from '../utils/constantes'
 import { Button } from 'react-native-paper'
+import { fonts } from '../utils/theme'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const SaleModale = ({showModal}) => {
+const SaleModale = ({showModal, closeModal}) => {
    const [formData, setFormData] = useState({
       clientName: '',
-      productName: '',
+      produit: '',
       quantity: '',
-      unitPrice: '',
+      price: '',
    });
+   const [error, setError] = useState(null)
 
    const handleCloseModal = () => {
-      setShowModal(false);
+      closeModal()
       setFormData({
         clientName: '',
-        productName: '',
+        produit: '',
         quantity: '',
-        unitPrice: '',
+        price: '',
       });
    };
   
    const handleSaveSale = async () => {
       try {
-        const url = `${API_URL}/sales`;
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({
-            ...formData,
-          }),
-        });
-  
-        if (response.ok) {
-          const newSale = await response.json();
-          setSalesList([...salesList, newSale]);
-          handleCloseModal();
-        } else {
-          console.error('Error during sale recording:', response.statusText);
+        const url = `${API_URL}/ventes`;
+        const token = await AsyncStorage.getItem('token')
+        if(formData.clientName && formData.price && formData.produit && formData.quantity) {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              ...formData,
+            }),
+          });
+    
+          if (response.ok) {
+            handleCloseModal();
+          } else {
+            console.error('Error during sale recording:', response.statusText);
+          }
         }
       } catch (error) {
         console.error('Error during sale recording:', error.message);
@@ -69,8 +73,8 @@ const SaleModale = ({showModal}) => {
               <FontAwesome5 name="tag" style={styles.icon} />
               <TextInput
                 placeholder="Nom du produit"
-                value={formData.productName}
-                onChangeText={(text) => setFormData({ ...formData, productName: text })}
+                value={formData.produit}
+                onChangeText={(text) => setFormData({ ...formData, produit: text })}
                 style={styles.input}
               />
             </View>
@@ -90,15 +94,41 @@ const SaleModale = ({showModal}) => {
               <FontAwesome5 name="money-bill" style={styles.icon} />
               <TextInput
                 placeholder="Prix unitaire"
-                value={formData.unitPrice}
-                onChangeText={(text) => setFormData({ ...formData, unitPrice: text })}
+                value={formData.price}
+                onChangeText={(text) => setFormData({ ...formData, price: text })}
                 keyboardType="numeric"
                 style={styles.input}
               />
             </View>
-
-            <Button title="Enregistrer la vente" onPress={handleSaveSale} />
-            <Button title="Fermer" onPress={handleCloseModal} />
+            
+            <View style={{ flexDirection:'row', justifyContent: 'space-around', marginTop:5 }}>
+              <TouchableOpacity 
+                onPress={handleSaveSale}
+                style={{ backgroundColor:'green', padding: 10,paddingHorizontal:20, borderRadius: 20 }}
+              >
+                <Text style={{ color: 'white', fontFamily: fonts.font600 }}>Ajouter</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                onPress={handleCloseModal}
+                style={{ backgroundColor:'red', padding: 10,paddingHorizontal:20, borderRadius: 20 }}
+              >
+                <Text style={{ color: 'white', fontFamily: fonts.font600 }}>Fermer</Text>
+              </TouchableOpacity>
+            </View>
+            
+            {/* <Button 
+              label={"Ajouter"}
+              labelStyle={{ 
+                fontFamily: fonts.font500,
+                fontSize: 14,
+              }}
+              onPress={handleSaveSale}
+            />
+            <Button 
+              label={"Fermer"} 
+              onPress={handleCloseModal} 
+              style={{ backgroundColor:'red', color:'white' }}
+            /> */}
           </View>
         </View>
       </Modal>
@@ -107,24 +137,15 @@ const SaleModale = ({showModal}) => {
 }
 
 const styles = StyleSheet.create({
-   addButton: {
-     backgroundColor: 'green',
-     padding: 16,
-     borderRadius: 50,
-     position: 'absolute',
-     bottom: 16,
-     right: 16,
-   },
    modalContainer: {
      flex: 1,
      justifyContent: 'center',
      alignItems: 'center',
      width: SCREEN.width,
-     marginHorizontal: 15
    },
    modalContent: {
      backgroundColor: 'white',
-     padding: 16,
+     padding:20,
      borderRadius: 10,
      elevation: 5,
    },
