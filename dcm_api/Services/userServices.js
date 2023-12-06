@@ -1,12 +1,12 @@
 const userModel = require('../models/User')
 
 const getUsers = async () => {
-   const users = await userModel.find({}, '-password').populate('agency')
+   const users = await userModel.find({}, '-password').populate('ventes')
    return users
 }
 
 const getUser = async (id) => {
-   const user = await userModel.findById(id, '-password').populate('agency')
+   const user = await userModel.findById(id, '-password').populate('ventes')
    return user;
 }
 
