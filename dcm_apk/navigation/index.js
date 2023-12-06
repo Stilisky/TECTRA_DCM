@@ -16,22 +16,24 @@ const Tab = createBottomTabNavigator();
 const AppNavigator = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    const checkIfUserIsLoggedIn = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        setLoggedIn(!!token);
-      } catch (error) {
-        console.error('Error checking if user is logged in:', error.message);
-      }
-    };
+  const checkIfUserIsLoggedIn = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      setLoggedIn(!!token);
+    } catch (error) {
+      // Set loggedIn to false if there is an error retrieving the token
+      setLoggedIn(false);
+      console.error('Error checking if user is logged in:', error.message);
+    }
+  };
+  
 
+  useEffect(() => {
     checkIfUserIsLoggedIn();
   }, []);
 
-  return (
-    <NavigationContainer>
-      {isLoggedIn ? (
+  if (isLoggedIn) {
+    return (
         <Tab.Navigator>
           <Tab.Screen
             name="ACCUEIL"
@@ -61,11 +63,12 @@ const AppNavigator = () => {
             }}
           />
         </Tab.Navigator>
-      ) : (
-        <LoginScreen />
-      )}
-    </NavigationContainer>
-  );
+      
+    );
+  } else {
+    // Show the login screen if the user is not logged in
+    return <LoginScreen />;
+  }
 };
 
 export default AppNavigator;
