@@ -1,57 +1,30 @@
 // ProfilScreen.js
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, StatusBar, Image } from 'react-native';
+import { UserContext } from '../../../context/userContext';
 
 const ProfilScreen = ({ navigation, route }) => {
-  const [userData, setUserData] = useState(null);
+  const {user, logout} = useContext(UserContext)
 
-  useEffect(() => {
-    loadUserData();
-  }, []);
-
-  const loadUserData = useCallback(async () => {
-    try {
-      const userDataString = await AsyncStorage.getItem('userData');
-      if (userDataString) {
-        const userData = JSON.parse(userDataString);
-        setUserData(userData);
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement des données de l\'utilisateur :', error.message);
-    }
-  }, []);
+ 
 
   const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('token');
-      await AsyncStorage.removeItem('userData');
-      navigation.navigate('login');  // Utilisez la navigation directe ici
-    } catch (error) {
-      console.error('Erreur lors de la déconnexion :', error.message);
-    }
+    logout()
   };
 
   return (
-    <View style={styles.container}>
-      {userData ? (
-        <>
-          <Text style={styles.title}>Profil de {userData.username}</Text>
-          <Text>Email: {userData.email}</Text>
-          {/* Affichez d'autres informations sur le profil de l'utilisateur au besoin */}
-          <Button title="Se déconnecter" onPress={handleLogout} />
-        </>
-      ) : (
-        <Text>Chargement du profil...</Text>
-      )}
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+          {/* <Image source={}/> */}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: StatusBar.currentHeight,
     justifyContent: 'center',
     alignItems: 'center',
   },

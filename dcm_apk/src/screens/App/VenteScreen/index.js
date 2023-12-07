@@ -2,14 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput, Button, FlatList, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { SCREEN } from '../../../components/utils/constantes';
+import { API_URL, SCREEN } from '../../../components/utils/constantes';
 import SaleModale from '../../../components/ui/SaleModale';
 import { fonts } from '../../../components/utils/theme';
 import SaleCard from '../../../components/ui/SaleCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const VenteScreen = () => {
-  const navigation = useNavigation();
+const VenteScreen = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const [salesList, setSalesList] = useState([]);
   
@@ -36,7 +35,8 @@ const VenteScreen = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setSalesList(data.ventes.slice(-10));
+        console.log(data.ventes)
+        setSalesList(data.ventes.reverse().slice(0, 10));
       } else {
         console.error('Error fetching sales:', response.statusText);
       }
@@ -51,8 +51,8 @@ const VenteScreen = () => {
       <ScrollView>
         <View style={{ flexDirection:'row', justifyContent:'space-between', marginTop: 15, paddingHorizontal:5}}>
           <Text style={{ fontFamily: fonts.font600, marginLeft: 10, fontSize: 18}}>Mes 10 dernières ventes</Text>
-          <TouchableOpacity style={{ marginRight:10 }}>
-            <Text style={{ color: 'blue', fontSize: 18, fontFamily: fonts.font600, textDecorationLine: 'underline'}}>Voir Tout</Text>
+          <TouchableOpacity style={{ marginRight:10 }} onPress={()=>{navigation.navigate('history')}}>
+            <Text style={{ color: 'red', fontSize: 18, textDecorationLine: 'underline'}}>Voir Tout</Text>
           </TouchableOpacity>
         </View>
 
@@ -65,7 +65,7 @@ const VenteScreen = () => {
         <FontAwesome5 name="plus" size={24} color="white" />
       </TouchableOpacity>
     </SafeAreaView>
-    <SaleModale showModal={showModal} closeModal={() => setShowModal(false)}/>
+    <SaleModale showModal={showModal} closeModal={() => setShowModal(false)} getSales={fetchSales}/>
     </>
   );
 };

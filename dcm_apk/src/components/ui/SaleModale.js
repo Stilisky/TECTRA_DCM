@@ -6,7 +6,7 @@ import { Button } from 'react-native-paper'
 import { fonts } from '../utils/theme'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const SaleModale = ({showModal, closeModal}) => {
+const SaleModale = ({showModal, closeModal, getSales}) => {
    const [formData, setFormData] = useState({
       clientName: '',
       produit: '',
@@ -16,6 +16,7 @@ const SaleModale = ({showModal, closeModal}) => {
    const [error, setError] = useState(null)
 
    const handleCloseModal = () => {
+      getSales()
       closeModal()
       setFormData({
         clientName: '',

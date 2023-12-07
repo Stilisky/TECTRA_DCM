@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import { fonts, sizes } from '../../../components/utils/theme';
 import SaleCard from '../../../components/ui/SaleCard';
+import { API_URL } from '../../../components/utils/constantes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const History = () => {
   const [salesList, setSalesList] = useState([]);
@@ -23,7 +25,7 @@ const History = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setSalesList(data.ventes);
+        setSalesList(data.ventes.reverse());
       } else {
         console.error('Error fetching sales:', response.statusText);
       }
@@ -36,9 +38,9 @@ const History = () => {
 
   return (
     <>
-    <SafeAreaView style={{ flex: 1, marginTop: StatusBar.currentHeight}}>
+    <SafeAreaView style={{ flex: 1, paddingBottom: 10}}>
       <ScrollView>
-        <View style={{ flexDirection:'row', justifyContent:'center', alignItems: 'center', marginTop: 15, paddingHorizontal:5}}>
+        <View style={{ flexDirection:'row', justifyContent:'center', alignItems: 'center', paddingHorizontal:5, marginTop: 5}}>
           <Text style={{ fontFamily: fonts.font600, marginLeft: 10, fontSize: sizes.xxl}}>Mes ventes</Text>
         </View>
 

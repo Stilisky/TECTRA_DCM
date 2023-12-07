@@ -7,6 +7,7 @@ import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import HomeScreen from '../screens/App/HomeScreen'
 import VenteScreen from '../screens/App/VenteScreen'
 import ProfilScreen from '../screens/App/ProfilScreen'
+import History from '../screens/App/HistoryScreen'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -89,10 +90,10 @@ const AppNavigation = () => {
             headerShown: false,
          }} name="Tab" component={TabNavigator} />
 
-         {/* <Stack.Screen options={() => ({
+         <Stack.Screen options={() => ({
             headerShown: true,
-            headerTitle: "Profil",
-         })} name="profilDetail" component={ProfilDetailScreen} /> */}
+            headerTitle: "Historiques des ventes",
+         })} name="history" component={History} />
 
       </Stack.Navigator>
    )
