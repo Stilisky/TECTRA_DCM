@@ -21,28 +21,29 @@ const VenteScreen = () => {
   
 
   useEffect(() => {
-    // const fetchSales = async () => {
-    //   try {
-    //     const salesUrl = `${API_URL}/sales`;
-    //     const response = await fetch(salesUrl, {
-    //       headers: {
-    //         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-    //       },
-    //     });
-
-    //     if (response.ok) {
-    //       const salesData = await response.json();
-    //       setSalesList(salesData);
-    //     } else {
-    //       console.error('Error fetching sales:', response.statusText);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching sales:', error.message);
-    //   }
-    // };
-
-    // fetchSales();
+    fetchSales()
   }, []);
+
+  const fetchSales = async () => {
+    try {
+      const url = `${API_URL}/users/id`;
+      const token = await AsyncStorage.getItem('token')
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSalesList(data.ventes.slice(-10));
+      } else {
+        console.error('Error fetching sales:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching sales:', error.message);
+    }
+  };
 
   return (
     <>
@@ -55,17 +56,9 @@ const VenteScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        <SaleCard/>
-        {/* Modal */}
+        {salesList && salesList.map((vente, index) => {
+          return <SaleCard vente={vente} key={index}/>
+        })}
 
       </ScrollView>
       <TouchableOpacity onPress={handleShowModal} style={styles.addButton}>
