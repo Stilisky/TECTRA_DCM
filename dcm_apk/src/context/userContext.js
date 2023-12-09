@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useEffect, useState } from "react";
 import { API_URL } from "../components/utils/constantes";
+import { Alert } from "react-native";
 
 
 export const UserContext = createContext();
@@ -56,7 +57,7 @@ export const UserProvider = ({ children }) => {
             await AsyncStorage.setItem("token", data.acces_token);
             setUser(data);
          } else {
-            console.log("not work");
+            Alert.alert("Erreur d'authentification", 'Email ou mot de passe incorrect');
          }
       } catch (error) {
          console.log(error);
