@@ -5,4 +5,4 @@ const {createZone, getZones} = require('../controllers/ZoneController')
 
 router.route('/').get(getZones).post(authAdmin, createZone)
 
-module.exports = {router}
+module.exports = router
