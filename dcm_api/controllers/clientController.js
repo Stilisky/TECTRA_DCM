@@ -25,19 +25,20 @@ const getClient = async (req, res) => {
 
 const createClient = async (req, res) => {
    try {
-      const {clientName, entrepriseName, email, phone, adresse} = req.body
-      if(clientName && entrepriseName && email && phone && adresse) {
+      const { entrepriseName, email, phone, adresse, zone, distributions} = req.body
+      if(entrepriseName && email && phone && adresse && zone) {
          const exist = await clientService.getClientByName(entrepriseName)
          if(exist) {
             res.status(400).json({message: "Client already exist"})
          } else {
             const user = await userService.getUser(req.params.userId)
-            const model = {
-               clientName: clientName,
+            const model = {                
                entrepriseName: entrepriseName,
                email: email,
                phone: phone,
                adresse: adresse,
+               distributions: distributions,
+               zone: zone,
                commercial: user
             }
             const cli = await clientService.register(model)

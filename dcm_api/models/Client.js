@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 
 const clientSchema = new mongoose.Schema({
-   clientName : {
-      type: String,
-      required: true
-   },
    entrepriseName : {
       type: String,
       required: true,
@@ -18,21 +14,28 @@ const clientSchema = new mongoose.Schema({
       type: String,
       require: true
    },
+   zone : {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Zone'
+   },
    adresse: {
-      type: String,
+      type: Object,
       require: true
    },
    created_at: {
       type: Date,
       default: Date.now()
    },
+   distributions : [{
+      type: Object
+   }],
    commercial : {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
    },
    purchases : [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Sale'
+      ref: 'Vente'
    }]
 })
 

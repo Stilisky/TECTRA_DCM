@@ -51,14 +51,14 @@ const deleteVente = async (req, res) => {
 
 const createVente = async (req, res) => {
    try {
-      const {clientName, produit, quantity, price, } = req.body
+      const {client, produit, quantity, price } = req.body
       const comId = req.params.userId
       const user = await userService.getUser(comId)
       let sellingPrice = 0
-      if(clientName && produit && quantity && price) {
+      if(client && produit && quantity && price) {
          sellingPrice = price * quantity
          const model = {
-            clientName: clientName,
+            client: client,
             produit: produit,
             quantity: quantity,
             price: price,

@@ -1,10 +1,6 @@
 const mongoose =require('mongoose')
 
 const venteSchema = new mongoose.Schema({
-   clientName: {
-      type: String,
-      require: true
-   },
    produit: {
       type: String,
       require: true
@@ -25,10 +21,14 @@ const venteSchema = new mongoose.Schema({
       type: Date,
       default: Date.now()
    },
-   commercial: [{
+   client: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Client'
+   },
+   commercial: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
-   }]
+   }
 })
 
 module.exports = mongoose.model('Vente', venteSchema)
